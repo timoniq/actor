@@ -41,3 +41,7 @@ also after the real name mime type can be declared preceded by ` `.
 ## favicon
 
 every actor should have a favicon named `{actor name}.ico` and located in `static` folder.
+
+# useful methods
+
+`Handler.getpath(local_path)` in any actor's app returns an absolute path of the local path given.

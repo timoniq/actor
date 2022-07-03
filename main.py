@@ -7,8 +7,11 @@ from importlib.machinery import SourceFileLoader
 
 import aiofiles
 import uvicorn
+import pathlib
 
 from actor import ABCHandler, Response, Context
+
+CURRENT_ABSPATH = str(pathlib.Path().resolve())
 
 replacements: typing.Dict[str, str] = {}
 
@@ -43,6 +46,11 @@ for address in addresses:
     sys.path.append(address)
     a = SourceFileLoader("app", address + "/app.py").load_module()
     handler = getattr(a, "Handler")
+    setattr(
+        handler,
+        "getpath",
+        lambda *path: CURRENT_ABSPATH + os.sep + address + os.sep + path[-1]
+    )
     if not handler:
         print(f"Unable to load {address}, Handler is undefined")
         continue

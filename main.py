@@ -46,11 +46,22 @@ for address in addresses:
     sys.path.append(address)
     a = SourceFileLoader("app", address + "/app.py").load_module()
     handler = getattr(a, "Handler")
-    setattr(
-        handler,
-        "getpath",
-        lambda *path: CURRENT_ABSPATH + os.sep + address + os.sep + path[-1] if not path[-1].startswith("/") else path[-1]
-    )
+    if not address.startswith("/"):
+        setattr(
+            handler,
+            "getpath",
+            lambda *path: CURRENT_ABSPATH + os.sep + address + os.sep + path[-1]
+            if not path[-1].startswith("/")
+            else path[-1],
+        )
+    else:
+        setattr(
+            handler,
+            "getpath",
+            lambda *path: address + os.sep + path[-1]
+            if not path[-1].startswith("/")
+            else path[-1],
+        )
     if not handler:
         print(f"Unable to load {address}, Handler is undefined")
         continue

@@ -49,7 +49,7 @@ for address in addresses:
     setattr(
         handler,
         "getpath",
-        lambda *path: CURRENT_ABSPATH + os.sep + address + os.sep + path[-1]
+        lambda *path: CURRENT_ABSPATH + os.sep + address + os.sep + path[-1] if not path[-1].startswith("/") else path[-1]
     )
     if not handler:
         print(f"Unable to load {address}, Handler is undefined")

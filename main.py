@@ -9,7 +9,7 @@ import aiofiles
 import uvicorn
 import pathlib
 
-from actor import ABCHandler, Response, Context
+from actor import ABCHandler, Response, Context, Request
 
 CURRENT_ABSPATH = str(pathlib.Path().resolve())
 
@@ -122,7 +122,8 @@ async def app(scope, receiver, sender):
             await ctx.send(response)
 
     else:
-        response = await handlers[host].handle(path, headers)
+        request = Request(path, headers, scope, receiver, sender)
+        response = await handlers[host].handle(request)
         if response:
             await ctx.send(response)
 

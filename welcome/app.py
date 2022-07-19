@@ -1,6 +1,6 @@
-from actor import ABCHandler, ABCResponse, Response
+from actor import ABCHandler, ABCResponse, Response, Request
 
 
 class Handler(ABCHandler):
-    async def handle(self, path: str, headers: dict) -> ABCResponse:
+    async def handle(self, request: Request) -> ABCResponse:
         return Response(200, b"Hello world!")

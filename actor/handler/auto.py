@@ -1,16 +1,16 @@
-from .abc import ABCHandler
+from .abc import ABCHandler, Request
 from actor.response import ABCResponse
 
 
 class AutoHandler(ABCHandler):
-    async def undefined(self, path: str, headers: dict) -> ABCResponse:
+    async def undefined(self, request: Request) -> ABCResponse:
         pass
 
-    async def handle(self, path: str, headers: dict) -> ABCResponse:
+    async def handle(self, request: Request) -> ABCResponse:
         for name in dir(self):
             if name.startswith("handler_"):
                 element = getattr(self, name)
-                resp = element(path, headers)
+                resp = element(request)
                 if not resp:
                     continue
                 resp = await resp
@@ -18,4 +18,4 @@ class AutoHandler(ABCHandler):
                     continue
                 return resp
 
-        return await self.undefined(path, headers)
+        return await self.undefined(request)
